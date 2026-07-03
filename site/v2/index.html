@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Phase 1 — Revenue Operations Foundation · DBA × SMB Ops</title>
+<meta name="description" content="Phase 1 implementation proposal for Daniel Business Advisory: the construction drawing set for a revenue operations foundation. Prepared by SMB Ops.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,400..700;125,500..700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f3f5f7; --sheet:#fbfcfd; --ink:#111827; --slate:#6b7686;
+  --blue:#2742c7; --blue-deep:#16225c; --blue-wash:#e6eaf6; --blue-line:#c9d2ec;
+  --hairline:#dde2e9; --money:#111827;
+  --mono:'IBM Plex Mono',monospace; --sans:'IBM Plex Sans',sans-serif; --disp:'Archivo',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16.5px;line-height:1.62;-webkit-font-smoothing:antialiased}
+::selection{background:var(--blue);color:#fff}
+a{color:inherit}
+.wrap{max-width:1140px;margin:0 auto;padding:0 26px}
+
+/* ---------- top bar ---------- */
+.topbar{position:sticky;top:0;z-index:60;background:rgba(243,245,247,.94);backdrop-filter:blur(8px);border-bottom:1.5px solid var(--ink)}
+.topbar-in{max-width:1140px;margin:0 auto;padding:11px 26px;display:flex;align-items:center;gap:16px}
+.topbar .mark{font-family:var(--disp);font-stretch:125%;font-weight:700;font-size:14px;letter-spacing:.06em}
+.topbar .mark span{color:var(--blue)}
+.topbar .doc{font-family:var(--mono);font-size:11.5px;color:var(--slate);letter-spacing:.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topbar .spacer{flex:1}
+.topbar .fig{font-family:var(--mono);font-size:12px;color:var(--ink);white-space:nowrap}
+.btn{display:inline-block;background:var(--blue);color:#fff;text-decoration:none;font-family:var(--mono);font-size:13px;font-weight:600;letter-spacing:.03em;padding:10px 20px;border:1.5px solid var(--blue);transition:all .15s;white-space:nowrap}
+.btn:hover{background:var(--blue-deep);border-color:var(--blue-deep)}
+.btn:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.btn.line{background:transparent;color:var(--blue)}
+.btn.line:hover{background:var(--blue-wash);color:var(--blue-deep)}
+.btn.onblue{background:#fff;color:var(--blue-deep);border-color:#fff}
+.btn.onblue:hover{background:var(--blue-wash)}
+.btn.onblue-line{background:transparent;color:#fff;border-color:rgba(255,255,255,.55)}
+.btn.onblue-line:hover{border-color:#fff;background:rgba(255,255,255,.08)}
+
+/* ---------- blueprint hero ---------- */
+.hero{background:var(--blue-deep);color:#f2f4fb;position:relative;overflow:hidden;border-bottom:1.5px solid var(--ink)}
+.hero::before{content:"";position:absolute;inset:0;
+  background-image:linear-gradient(rgba(255,255,255,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.055) 1px,transparent 1px),linear-gradient(rgba(255,255,255,.09) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.09) 1px,transparent 1px);
+  background-size:24px 24px,24px 24px,120px 120px,120px 120px;pointer-events:none}
+.hero-in{max-width:1140px;margin:0 auto;padding:58px 26px 40px;position:relative}
+.hero .sheetline{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:#93a4e8;border-bottom:1px solid rgba(255,255,255,.22);padding-bottom:12px;flex-wrap:wrap;gap:8px}
+.hero h1{font-family:var(--disp);font-stretch:125%;font-weight:650;font-size:clamp(38px,4.8vw,62px);line-height:1.02;letter-spacing:-.01em;text-transform:uppercase;margin:34px 0 18px;max-width:900px}
+.hero h1 em{font-style:normal;color:#8fa3f0}
+.hero .sub{font-size:18px;line-height:1.6;color:#c4cdf0;max-width:620px}
+.hero-grid{display:grid;grid-template-columns:1fr 360px;gap:40px;align-items:end;margin-top:44px}
+.hero .figs{display:flex;gap:0;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.04)}
+.hero .figs>div{padding:16px 22px;border-right:1px solid rgba(255,255,255,.28);flex:1}
+.hero .figs>div:last-child{border-right:0}
+.hero .figs .k{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#93a4e8}
+.hero .figs .v{font-family:var(--disp);font-stretch:125%;font-weight:650;font-size:26px;margin-top:6px}
+.hero .figs .d{font-size:12px;color:#aab6ea;margin-top:2px}
+/* title block — the signature */
+.tblock{border:1.5px solid rgba(255,255,255,.65);background:rgba(10,18,54,.55);font-size:12.5px}
+.tblock .row{display:grid;grid-template-columns:110px 1fr;border-bottom:1px solid rgba(255,255,255,.28)}
+.tblock .row:last-child{border-bottom:0}
+.tblock .row .k{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#93a4e8;padding:8px 12px;border-right:1px solid rgba(255,255,255,.28);display:flex;align-items:center}
+.tblock .row .v{padding:8px 12px;font-weight:500}
+.hero .cta-row{display:flex;gap:12px;margin-top:26px;flex-wrap:wrap}
+
+/* ---------- sheet sections ---------- */
+main{max-width:1140px;margin:0 auto;padding:26px 26px 90px}
+section.sheet{background:var(--sheet);border:1.5px solid var(--ink);margin-top:26px;scroll-margin-top:84px}
+.sheet-head{display:flex;align-items:baseline;gap:18px;padding:14px 28px;border-bottom:1.5px solid var(--ink);background:var(--paper)}
+.sheet-head .no{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.1em;color:var(--blue)}
+.sheet-head h2{font-family:var(--disp);font-stretch:125%;font-weight:650;font-size:clamp(20px,2.2vw,27px);text-transform:uppercase;letter-spacing:.01em}
+.sheet-head .note{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--slate);letter-spacing:.06em;text-transform:uppercase}
+.sheet-body{padding:30px 28px}
+.sheet-body p+p{margin-top:14px}
+.lede{font-size:19px;line-height:1.6;font-weight:500;max-width:760px}
+.muted{color:var(--slate)}
+.callout{border-left:3px solid var(--blue);background:var(--blue-wash);padding:16px 22px;margin-top:20px;font-size:16px;max-width:760px}
+
+/* spec list (executive summary) */
+.spec{margin-top:8px;max-width:820px}
+.spec li{list-style:none;display:grid;grid-template-columns:44px 1fr;gap:14px;padding:13px 0;border-bottom:1px solid var(--hairline);align-items:baseline}
+.spec li:last-child{border-bottom:0}
+.spec .m{font-family:var(--mono);font-size:11.5px;color:var(--blue);font-weight:600;letter-spacing:.08em}
+
+/* deliverables — bill of materials */
+.bom{width:100%;border-collapse:collapse;font-size:15.5px}
+.bom th{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--slate);font-weight:500;text-align:left;padding:10px 14px;border-bottom:1.5px solid var(--ink)}
+.bom td{padding:16px 14px;border-bottom:1px solid var(--hairline);vertical-align:top}
+.bom tr:last-child td{border-bottom:0}
+.bom .no{font-family:var(--mono);font-size:12px;color:var(--blue);font-weight:600;white-space:nowrap}
+.bom .name{font-weight:600;min-width:180px}
+.bom .win{color:var(--slate)}
+.bom .win b{color:var(--ink);font-weight:600}
+
+/* timeline — schematic */
+.sched{display:grid;grid-template-columns:repeat(5,1fr);gap:0;border:1px solid var(--blue-line);background:var(--sheet)}
+.sched .cell{border-right:1px solid var(--blue-line);padding:20px 18px 24px;position:relative}
+.sched .cell:last-child{border-right:0}
+.sched .wk{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--blue);font-weight:600}
+.sched .bar{height:8px;background:var(--blue);margin:12px 0 14px;position:relative}
+.sched .cell:not(:first-child) .bar::before{content:"";position:absolute;left:-19px;top:3px;width:19px;height:2px;background:var(--blue-line)}
+.sched h3{font-size:15px;font-weight:600;line-height:1.35;margin-bottom:8px}
+.sched p{font-size:13.5px;line-height:1.55;color:var(--slate)}
+.sched-note{font-family:var(--mono);font-size:11.5px;color:var(--slate);margin-top:12px;letter-spacing:.03em}
+
+/* value */
+.vfigs{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--blue-line);margin:22px 0}
+.vfigs>div{padding:20px 24px;border-right:1px solid var(--blue-line)}
+.vfigs>div:last-child{border-right:0}
+.vfigs .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--slate)}
+.vfigs .v{font-family:var(--disp);font-stretch:125%;font-weight:650;font-size:34px;margin-top:6px}
+.vfigs .v.blue{color:var(--blue)}
+.vfigs .d{font-size:13px;color:var(--slate)}
+table.ledger{width:100%;border-collapse:collapse;font-size:15px;border:1px solid var(--blue-line)}
+.ledger th{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--slate);font-weight:500;text-align:left;padding:11px 16px;border-bottom:1.5px solid var(--ink);background:var(--paper)}
+.ledger td{padding:12px 16px;border-bottom:1px solid var(--hairline)}
+.ledger td.mono{font-family:var(--mono);font-size:13px;color:var(--slate)}
+.ledger td.amt{font-family:var(--mono);font-size:13.5px;font-weight:600;text-align:right}
+.ledger tr.total td{border-top:1.5px solid var(--ink);border-bottom:0;background:var(--blue-wash);font-weight:700}
+.ledger tr.total td.amt{color:var(--blue-deep)}
+.fine{font-size:13px;color:var(--slate);margin-top:12px;max-width:760px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:24px}
+.vcol h4{font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;font-weight:600;padding-bottom:10px;border-bottom:1.5px solid var(--ink);margin-bottom:4px}
+.vcol.count h4{color:var(--blue)}
+.vcol.upside h4{color:var(--slate)}
+.vcol li{list-style:none;padding:8px 0 8px 24px;border-bottom:1px solid var(--hairline);font-size:15px;position:relative}
+.vcol li:last-child{border-bottom:0}
+.vcol.count li::before{content:"✓";position:absolute;left:0;color:var(--blue);font-weight:600}
+.vcol.upside li{color:var(--slate)}
+.vcol.upside li::before{content:"+";position:absolute;left:0}
+
+/* investment */
+.inv{display:grid;grid-template-columns:1.15fr 1fr;gap:26px;align-items:start}
+.price-card{border:1.5px solid var(--ink);background:var(--paper)}
+.price-card .top{padding:24px 26px;border-bottom:1.5px solid var(--ink)}
+.price-card .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--slate)}
+.price-card .v{font-family:var(--disp);font-stretch:125%;font-weight:650;font-size:52px;line-height:1;margin-top:8px}
+.price-card .d{font-size:14px;color:var(--slate);margin-top:6px}
+.price-card .pay{display:grid;grid-template-columns:1fr 1fr}
+.price-card .pay>div{padding:16px 26px}
+.price-card .pay>div:first-child{border-right:1px solid var(--hairline)}
+.price-card .pay .pk{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--slate)}
+.price-card .pay .pv{font-family:var(--mono);font-size:15px;font-weight:600;margin-top:4px}
+.inv-side .row{display:flex;justify-content:space-between;align-items:baseline;padding:12px 0;border-bottom:1px solid var(--hairline);font-size:15px}
+.inv-side .row b{font-family:var(--mono);font-size:13.5px}
+.inv-side .row b.blue{color:var(--blue)}
+.inc-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.inc-grid span{font-family:var(--mono);font-size:11.5px;letter-spacing:.03em;border:1px solid var(--blue-line);background:var(--blue-wash);color:var(--blue-deep);padding:6px 12px}
+
+/* requirements table reuse ledger */
+.req-note{max-width:760px}
+
+/* scope chips */
+.chips{display:flex;flex-wrap:wrap;gap:9px;margin-top:18px}
+.chip{border:1px dashed var(--slate);color:var(--slate);padding:7px 14px;font-size:13.5px;font-family:var(--mono)}
+.chip s{text-decoration:none}
+
+/* roadmap */
+.road{border:1px solid var(--blue-line)}
+.road .ph{display:grid;grid-template-columns:64px 1fr auto;gap:16px;align-items:center;padding:15px 20px;border-bottom:1px solid var(--blue-line)}
+.road .ph:last-child{border-bottom:0}
+.road .n{font-family:var(--mono);font-size:11px;color:var(--slate);letter-spacing:.08em}
+.road .ph.now{background:var(--blue-wash)}
+.road .ph.now .n{color:var(--blue);font-weight:600}
+.road h4{font-size:15.5px;font-weight:600}
+.road h4 .tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;background:var(--blue);color:#fff;padding:2px 8px;margin-left:10px;vertical-align:2px}
+.road p{font-size:13.5px;color:var(--slate)}
+.road .dur{font-family:var(--mono);font-size:12px;color:var(--slate);white-space:nowrap}
+
+/* approval sheet */
+.approve{background:var(--blue-deep);color:#f2f4fb;border:1.5px solid var(--ink);margin-top:26px;position:relative;overflow:hidden;scroll-margin-top:84px}
+.approve::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:24px 24px;pointer-events:none}
+.approve .in{padding:48px 28px 44px;position:relative;max-width:1140px}
+.approve .no{font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:#93a4e8;font-weight:600}
+.approve h2{font-family:var(--disp);font-stretch:125%;font-weight:650;font-size:clamp(30px,3.6vw,48px);text-transform:uppercase;margin:12px 0 14px;line-height:1.02}
+.approve .sub{color:#c4cdf0;max-width:600px;font-size:16.5px}
+.approve .cta-row{display:flex;gap:12px;margin:28px 0 36px;flex-wrap:wrap}
+.approve ol{counter-reset:s;list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:0;border:1px solid rgba(255,255,255,.3)}
+.approve ol li{counter-increment:s;padding:16px 18px;border-right:1px solid rgba(255,255,255,.3);font-size:13.5px;color:#dbe1f6}
+.approve ol li:last-child{border-right:0}
+.approve ol li::before{content:"0" counter(s);display:block;font-family:var(--mono);font-size:11px;color:#93a4e8;letter-spacing:.1em;margin-bottom:6px}
+
+footer{max-width:1140px;margin:0 auto;padding:22px 26px 70px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:11.5px;color:var(--slate);letter-spacing:.04em}
+footer a{color:var(--blue);text-decoration:none}
+footer a:hover{text-decoration:underline}
+
+@media (max-width:920px){
+  .hero-grid{grid-template-columns:1fr}
+  .sched{grid-template-columns:1fr}
+  .sched .cell{border-right:0;border-bottom:1px solid var(--blue-line)}
+  .sched .cell:last-child{border-bottom:0}
+  .sched .cell:not(:first-child) .bar::before{display:none}
+  .vfigs{grid-template-columns:1fr}
+  .vfigs>div{border-right:0;border-bottom:1px solid var(--blue-line)}
+  .vfigs>div:last-child{border-bottom:0}
+  .two,.inv{grid-template-columns:1fr}
+  .topbar .doc,.topbar .fig{display:none}
+  .hero .figs{flex-direction:column}
+  .hero .figs>div{border-right:0;border-bottom:1px solid rgba(255,255,255,.28)}
+  .hero .figs>div:last-child{border-bottom:0}
+  .bom .win{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-in">
+    <span class="mark">SMB<span>·</span>OPS</span>
+    <span class="doc">DBA-P1 · REV A · Phase 1 — Revenue Operations Foundation</span>
+    <span class="spacer"></span>
+    <span class="fig">$18,500 fixed · 5 wk</span>
+    <a class="btn" href="#approve">Approve Phase 1</a>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="hero-in">
+    <div class="sheetline"><span>Implementation drawing set — Phase 1 of 5</span><span>Sheet 00 · Cover</span></div>
+    <h1>Revenue operations,<br><em>built to be trusted.</em></h1>
+    <p class="sub">Daniel Business Advisory has revenue in motion — the relationships, the referrals, the pipeline. Phase 1 builds the system underneath so leadership can see what's real, what's stalled, who owns it, and what happens next.</p>
+    <div class="hero-grid">
+      <div>
+        <div class="figs">
+          <div><div class="k">Investment</div><div class="v">$18,500</div><div class="d">fixed fee</div></div>
+          <div><div class="k">Build time</div><div class="v">5 wk</div><div class="d">7 deliverables</div></div>
+          <div><div class="k">Annual value</div><div class="v">$36k+</div><div class="d">capacity alone</div></div>
+          <div><div class="k">Yr-1 return</div><div class="v">1.9×</div><div class="d">payback ~6.2 mo</div></div>
+        </div>
+        <div class="cta-row">
+          <a class="btn onblue" href="#approve">Approve Phase 1</a>
+          <a class="btn onblue-line" href="#sh05">Review the numbers</a>
+        </div>
+      </div>
+      <div class="tblock" role="table" aria-label="Proposal title block">
+        <div class="row"><span class="k">Project</span><span class="v">Revenue Operations Foundation</span></div>
+        <div class="row"><span class="k">Client</span><span class="v">Daniel Business Advisory</span></div>
+        <div class="row"><span class="k">Drawn by</span><span class="v">SMB Ops</span></div>
+        <div class="row"><span class="k">Source</span><span class="v">Revenue Operations Blueprint</span></div>
+        <div class="row"><span class="k">Issued</span><span class="v">July 2026 · Rev A</span></div>
+        <div class="row"><span class="k">Valid to</span><span class="v">July 31, 2026</span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="sheet" id="sh01">
+    <div class="sheet-head"><span class="no">SHT 01</span><h2>The constraint</h2><span class="note">Context</span></div>
+    <div class="sheet-body">
+      <p class="lede">The business is ahead of its system. DBA has valuable relationships, active opportunities, and a clear growth plan — but the operating layer underneath can't yet carry that growth.</p>
+      <p class="muted" style="margin-top:16px;max-width:760px">Relationship data sits in separate places. Referral activity is hard to measure. Pipeline reporting takes manual interpretation before every review. Follow-up depends on memory, individual discipline, and informal coordination.</p>
+      <div class="callout"><strong>The cost isn't chaos — it's doubt.</strong> Leadership can't yet trust the system to show what's real, what's stalled, who owns each relationship, and what needs to happen next. Every decision pays a verification tax first.</div>
+    </div>
+  </section>
+
+  <section class="sheet" id="sh02">
+    <div class="sheet-head"><span class="no">SHT 02</span><h2>What Phase 1 changes</h2><span class="note">Acceptance criteria</span></div>
+    <div class="sheet-body">
+      <p class="muted" style="max-width:760px">Phase 1 is done when all five of these hold. They're the acceptance criteria for the project — measured against real records, not a demo.</p>
+      <ul class="spec">
+        <li><span class="m">AC-1</span><span>HubSpot is the operating source of truth for relationships, opportunities, and reporting — trusted, not tolerated.</span></li>
+        <li><span class="m">AC-2</span><span>Every active relationship has a type, an owner, a status, and a next action.</span></li>
+        <li><span class="m">AC-3</span><span>Pipeline stages reflect how revenue actually progresses and hold up in leadership review.</span></li>
+        <li><span class="m">AC-4</span><span>Executive reporting works without manual reconstruction before every meeting.</span></li>
+        <li><span class="m">AC-5</span><span>Future automation can be built on clean data — no redesign of the core CRM process.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sheet" id="sh03">
+    <div class="sheet-head"><span class="no">SHT 03</span><h2>Deliverables</h2><span class="note">7 items · fixed scope</span></div>
+    <div class="sheet-body" style="padding-top:18px">
+      <table class="bom">
+        <thead><tr><th>Item</th><th>Deliverable</th><th>What changes</th><th>How you'll know it worked</th></tr></thead>
+        <tbody>
+          <tr><td class="no">D-01</td><td class="name">CRM Operating Model</td><td>Clear rules for how relationships, opportunities, companies, referral partners, and clients are organized and owned in HubSpot.</td><td class="win"><b>Leadership trusts the CRM</b> because it reflects how the business actually works.</td></tr>
+          <tr><td class="no">D-02</td><td class="name">Customer Lifecycle Framework</td><td>Every relationship moves through a defined lifecycle with clear ownership, status, and next action.</td><td class="win"><b>No more guessing</b> whether a contact is a prospect, referral partner, opportunity, client, or dormant.</td></tr>
+          <tr><td class="no">D-03</td><td class="name">Revenue Pipeline Design</td><td>Pipeline stages rebuilt around how revenue actually progresses — not how activity happens to be recorded.</td><td class="win">Pipeline reviews become <b>forecasting conversations</b>, not status checks.</td></tr>
+          <tr><td class="no">D-04</td><td class="name">Relationship Intelligence Framework</td><td>Referral partners, investors, prospects, clients, and portfolio contacts classified and managed consistently.</td><td class="win">Relationship value is <b>visible and reportable</b> — not living in memory and inboxes.</td></tr>
+          <tr><td class="no">D-05</td><td class="name">HubSpot Implementation</td><td>The approved rules, fields, stages, views, and reporting structure implemented inside HubSpot.</td><td class="win">The team runs on HubSpot daily — <b>no workarounds, no side spreadsheets</b>.</td></tr>
+          <tr><td class="no">D-06</td><td class="name">Executive Intelligence Layer</td><td>Dashboards for pipeline health, CRM quality, relationship activity, and operational performance.</td><td class="win">Alan and Anggay <b>see the business without assembling reports</b>.</td></tr>
+          <tr><td class="no">D-07</td><td class="name">Operating Standards</td><td>Simple standards for ownership, data quality, review cadence, and system maintenance.</td><td class="win">The CRM <b>doesn't degrade again</b> after handoff.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="sheet" id="sh04">
+    <div class="sheet-head"><span class="no">SHT 04</span><h2>Build schedule</h2><span class="note">5 weeks · kickoff → handoff</span></div>
+    <div class="sheet-body">
+      <div class="sched">
+        <div class="cell"><span class="wk">Week 1</span><div class="bar"></div><h3>CRM &amp; relationship audit</h3><p>Review current records, relationship types, lifecycle gaps, and reporting issues. Lock final operating decisions before any build.</p></div>
+        <div class="cell"><span class="wk">Week 2</span><div class="bar"></div><h3>Data cleanup &amp; standards</h3><p>Clean core records, standardize lifecycle stages, apply ownership and data standards.</p></div>
+        <div class="cell"><span class="wk">Week 3</span><div class="bar"></div><h3>Pipeline &amp; relationship design</h3><p>Implement pipeline stages, relationship categories, referral tracking, and ownership rules.</p></div>
+        <div class="cell"><span class="wk">Week 4</span><div class="bar"></div><h3>Reporting &amp; validation</h3><p>Build dashboards and test them against real records — leadership confirms the system reflects reality.</p></div>
+        <div class="cell"><span class="wk">Week 5</span><div class="bar"></div><h3>Rollout &amp; training</h3><p>Team walkthrough, documentation, handoff, and final QA.</p></div>
+      </div>
+      <p class="sched-note">Decisions front-loaded in week 1 — the build doesn't stall mid-project waiting on calls.</p>
+    </div>
+  </section>
+
+  <section class="sheet" id="sh05">
+    <div class="sheet-head"><span class="no">SHT 05</span><h2>The value math</h2><span class="note">Conservative by design</span></div>
+    <div class="sheet-body">
+      <p class="lede" style="max-width:820px">These numbers count only recovered operating capacity. Revenue upside — better follow-up, referral visibility, faster deals — is deliberately left out, so the case holds even if only the boring part comes true.</p>
+      <div class="vfigs">
+        <div><div class="k">Capacity created</div><div class="v">30 hrs<span style="font-size:18px;color:var(--slate)">/mo</span></div><div class="d">leadership + operations time</div></div>
+        <div><div class="k">Reclaimed annually</div><div class="v">360 hrs</div><div class="d">≈ 9 full working weeks</div></div>
+        <div><div class="k">Annual capacity value</div><div class="v blue">$36,000</div><div class="d">at $100/hr fully burdened</div></div>
+      </div>
+      <table class="ledger">
+        <thead><tr><th>Workstream</th><th>Monthly</th><th>Basis</th><th style="text-align:right">Annual value</th></tr></thead>
+        <tbody>
+          <tr><td>CRM Operating Model</td><td class="mono">8 hrs/mo</td><td class="mono">8 × 12 × $100</td><td class="amt">$9,600</td></tr>
+          <tr><td>CRM Implementation</td><td class="mono">5 hrs/mo</td><td class="mono">5 × 12 × $100</td><td class="amt">$6,000</td></tr>
+          <tr><td>Relationship Intelligence Framework</td><td class="mono">6 hrs/mo</td><td class="mono">6 × 12 × $100</td><td class="amt">$7,200</td></tr>
+          <tr><td>Executive Intelligence Layer</td><td class="mono">7 hrs/mo</td><td class="mono">7 × 12 × $100</td><td class="amt">$8,400</td></tr>
+          <tr><td>Referral Partner Engine Foundation</td><td class="mono">4 hrs/mo</td><td class="mono">4 × 12 × $100</td><td class="amt">$4,800</td></tr>
+          <tr class="total"><td>Total</td><td class="mono">30 hrs/mo</td><td class="mono">360 × $100</td><td class="amt">$36,000</td></tr>
+        </tbody>
+      </table>
+      <p class="fine">Assumes $100/hr fully burdened executive and operational capacity. Refine after Phase 1 produces cleaner operating data.</p>
+      <div class="two">
+        <div class="vcol count"><h4>Counted in the $36,000</h4><ul>
+          <li>Reduced manual reporting</li><li>Less CRM cleanup and reconciliation</li><li>Faster relationship and opportunity lookup</li><li>Less manual coordination</li><li>Cleaner pipeline review preparation</li></ul></div>
+        <div class="vcol upside"><h4>Upside not counted</h4><ul>
+          <li>Additional referrals</li><li>Faster deal progression</li><li>Improved close rate</li><li>Better follow-up quality</li><li>Future AI and automation leverage</li><li>Portfolio company reuse</li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sheet" id="sh06">
+    <div class="sheet-head"><span class="no">SHT 06</span><h2>Investment</h2><span class="note">Fixed fee · no overruns</span></div>
+    <div class="sheet-body">
+      <div class="inv">
+        <div class="price-card">
+          <div class="top">
+            <div class="k">Phase 1 · fixed fee</div>
+            <div class="v">$18,500</div>
+            <div class="d">Scope is fixed. If it takes longer, that's on us.</div>
+          </div>
+          <div class="pay">
+            <div><div class="pk">At kickoff</div><div class="pv">50% · $9,250</div></div>
+            <div><div class="pk">At completion</div><div class="pv">50% · $9,250</div></div>
+          </div>
+        </div>
+        <div class="inv-side">
+          <div class="row"><span>Estimated payback</span><b class="blue">~6.2 months</b></div>
+          <div class="row"><span>Year-one return on fee</span><b class="blue">≈1.9×</b></div>
+          <div class="row"><span>New software required</span><b>None expected</b></div>
+          <div class="row"><span>Ongoing costs added</span><b>None — existing subscriptions</b></div>
+          <div class="inc-grid">
+            <span>Discovery</span><span>Operating model design</span><span>CRM implementation</span><span>Executive reporting</span><span>Documentation</span><span>Team rollout</span>
+          </div>
+        </div>
+      </div>
+      <p class="fine" style="margin-top:22px">Later phases build on this foundation without redesigning the core CRM process. Future phases are optional and scoped separately.</p>
+    </div>
+  </section>
+
+  <section class="sheet" id="sh07">
+    <div class="sheet-head"><span class="no">SHT 07</span><h2>Tools &amp; running costs</h2><span class="note">Uses what you have</span></div>
+    <div class="sheet-body">
+      <p class="muted req-note">Phase 1 runs on DBA's existing HubSpot account as the system of record. No new major software purchase is expected unless HubSpot plan limits surface during implementation.</p>
+      <table class="ledger" style="margin-top:20px">
+        <thead><tr><th>Tool</th><th>Phase 1</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td><strong>HubSpot</strong></td><td class="mono">Required</td><td>Primary CRM and reporting system — existing DBA subscription</td></tr>
+          <tr><td><strong>Google Workspace</strong></td><td class="mono">Required</td><td>Collaboration, documentation, handoff — existing DBA subscription</td></tr>
+          <tr><td><strong>Zapier / n8n</strong></td><td class="mono">Not yet</td><td>Introduced in later automation phases if needed</td></tr>
+          <tr><td><strong>AI tooling</strong></td><td class="mono">Not yet</td><td>Meeting intelligence and workflow automation arrive in later phases</td></tr>
+        </tbody>
+      </table>
+      <p class="fine">After Phase 1: ongoing costs stay limited to existing subscriptions. AI usage / API costs are not part of Phase 1. SMB Ops support after rollout is optional and scoped separately.</p>
+    </div>
+  </section>
+
+  <section class="sheet" id="sh08">
+    <div class="sheet-head"><span class="no">SHT 08</span><h2>Out of scope — on purpose</h2><span class="note">Sequenced, not skipped</span></div>
+    <div class="sheet-body">
+      <p class="muted" style="max-width:760px">Each of these belongs to a defined later phase. Building them on today's data would automate the mess; Phase 1 exists so they land on a clean foundation.</p>
+      <div class="chips">
+        <span class="chip">AI meeting intelligence</span><span class="chip">Cold outbound automation</span><span class="chip">LinkedIn automation</span><span class="chip">Lead scoring</span><span class="chip">AI follow-up drafting</span><span class="chip">Custom integrations</span><span class="chip">Portfolio company deployment</span><span class="chip">Advanced AI agents</span>
+      </div>
+      <div class="road" style="margin-top:26px">
+        <div class="ph now"><span class="n">PH-1</span><div><h4>Revenue Operations Foundation<span class="tag">This proposal</span></h4><p>The system of record — completed with this engagement</p></div><span class="dur">5 wk</span></div>
+        <div class="ph"><span class="n">PH-2</span><div><h4>Revenue Acquisition Engine</h4><p>Automated outbound, lead scoring, and conversation intelligence</p></div><span class="dur">6–8 wk</span></div>
+        <div class="ph"><span class="n">PH-3</span><div><h4>AI Workflow Layer</h4><p>AI-assisted follow-up, qualification, and meeting intelligence</p></div><span class="dur">4–6 wk</span></div>
+        <div class="ph"><span class="n">PH-4</span><div><h4>Executive Intelligence Platform</h4><p>Predictive pipeline, portfolio visibility, and investor reporting</p></div><span class="dur">6–8 wk</span></div>
+        <div class="ph"><span class="n">PH-5</span><div><h4>Portfolio Operating System</h4><p>Revenue operations playbook standardized across the full portfolio</p></div><span class="dur">8–12 wk</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="approve" id="approve">
+    <div class="in">
+      <span class="no">SHT 09 · APPROVAL</span>
+      <h2>Ready when you are.</h2>
+      <p class="sub">Approve by reply — the kickoff invoice and a scheduling link follow the same day. Implementation starts the week HubSpot access is in hand.</p>
+      <div class="cta-row">
+        <a class="btn onblue" href="mailto:hello@smb-ops.com?subject=Approved%3A%20DBA%20Phase%201%20—%20Revenue%20Operations%20Foundation&body=We%20approve%20the%20Phase%201%20scope%20as%20proposed%20(%2418%2C500%20fixed%2C%205%20weeks).%20Send%20the%20kickoff%20invoice%20and%20scheduling%20link.">Approve Phase 1 →</a>
+        <a class="btn onblue-line" href="mailto:hello@smb-ops.com?subject=DBA%20Phase%201%20—%20Question">Ask a question first</a>
+      </div>
+      <ol>
+        <li>Confirm scope</li>
+        <li>Schedule kickoff</li>
+        <li>Provide HubSpot access</li>
+        <li>Finalize operating decisions</li>
+        <li>Five-week build begins</li>
+      </ol>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span>SMB OPS · DBA-P1 · REV A · Issued July 2026 · Valid to July 31, 2026</span>
+  <span>Drawn from the Revenue Operations Blueprint · <a href="/v1/">Previous revision</a></span>
+</footer>
+
+</body>
+</html>
